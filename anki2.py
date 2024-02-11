@@ -287,9 +287,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Sync Obsidian flashcards with Anki')
     parser.add_argument('vault_path', help='The file path to the Obsidian vault')
     parser.add_argument('note_path', help='The path to the note folder within the vault')
-    parser.add_argument('--deck_name', default=AnkiConnect.DEFAULT_DECK, help='The name of the Anki deck (optional)')
+    parser.add_argument('--deck_name', help='The name of the Anki deck (optional)')
     parser.add_argument('--model_name', default=AnkiConnect.DEFAULT_MODEL, help='The name of the Anki model (optional)')
     parser.add_argument('--debug', action='store_true', help='Enable debug logging')
     args = parser.parse_args()
+
+    if args.deck_name is None:
+        args.deck_name = args.note_path.replace('/', '::')
 
     main(args.vault_path, args.note_path, args.debug, args.deck_name, args.model_name)
