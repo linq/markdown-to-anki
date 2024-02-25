@@ -51,7 +51,10 @@ class Flashcard:
             return origin
 
         meta_value = f"<!--Meta:id={self.anki_id};sum={self.card_sum}-->"
-        return origin.replace(self._meta_value, meta_value)
+        if self.state == Flashcard.STATE_INSERT:
+            return origin.replace(self.back, self.back + "\n" + meta_value)
+        else:
+            return origin.replace(self._meta_value, meta_value)
 
     @staticmethod
     def _extract_anki_meta(text):
@@ -250,7 +253,7 @@ def enable_debug_logging():
 def prepare_deck(deck_name, anki_connect):
     decks = anki_connect.deck_names()
     if deck_name not in decks:
-        anki_connect.create_deck(deck_name)
+        anki_connect.create_deck()
 
 
 def update_content(flashcards, original_content, file_path):
